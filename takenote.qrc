@@ -1,0 +1,19 @@
+<RCC>
+  <qresource prefix="icons">
+    <file>icons/lock_32x32.png</file>
+    <file>icons/user_32x32.png</file>
+    <file>icons/update.png</file>
+    <file>icons/delete.png</file>
+    <file>icons/eyeoff.png</file>
+    <file>icons/eyeon.png</file>
+    <file>icons/addnote.png</file>
+    <file>icons/logout.png</file>
+    <file>icons/notes.png</file>
+    <file>icons/reset.png</file>
+    <file>icons/login.png</file>
+    <file>icons/cancel.png</file>
+  </qresource>
+  <qresource prefix="images">
+    <file>icons/note_48x48.png</file>
+  </qresource>
+</RCC>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>663</width>
+    <height>480</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QFormLayout" name="formLayout">
+    <property name="horizontalSpacing">
+     <number>0</number>
+    </property>
+    <property name="verticalSpacing">
+     <number>1</number>
+    </property>
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>663</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(114, 159, 207);</string>
+   </property>
+   <widget class="QMenu" name="add_note">
+    <property name="title">
+     <string>add note</string>
+    </property>
+    <addaction name="separator"/>
+   </widget>
+   <widget class="QMenu" name="logout">
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(85, 87, 83);
+font: 75 italic 13pt &quot;Rasa&quot;;
+color: rgb(85, 87, 83);
+border-raduis:10px;</string>
+    </property>
+    <property name="title">
+     <string>logout</string>
+    </property>
+    <addaction name="separator"/>
+   </widget>
+   <addaction name="logout"/>
+   <addaction name="add_note"/>
+  </widget>
+ </widget>
+ <resources>
+  <include location="takenote.qrc"/>
+ </resources>
+ <connections/>
+</ui>
