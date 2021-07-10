@@ -7,9 +7,7 @@ from PyQt5 import QtCore
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
-import sys
 
-from mysql.connector.constants import ServerFlag
 from login import Ui_Form as loginForm
 from welcome import Ui_Form as welcomeUI
 from addnote import Ui_MainWindow as addNote
