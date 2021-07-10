@@ -84,7 +84,7 @@ class DBUserHelper:
 
     def __init__(self) -> None:
         self.insertQuery = """INSERT INTO %s(id_user, username ,password, created_at,updated_at,isLoggedIn) VALUES(NULL, "%s", "%s", "%s", "%s","%s");"""
-        self.updateQuery = """UPDATE %s SET username="%s",password="%s", updated_at="%s",isLoggedIn="%s" WHERE id_user=%d;"""
+        self.updateQuery = """UPDATE %s SET username="%s",password="%s", updated_at="%s",isLoggedIn='%s' WHERE id_user=%d;"""
         self.deleteQuery = """DELETE FROM %s WHERE id_user=%d;"""
         self.selectQuery = """SELECT id_user, username , created_at,isLoggedIn FROM %s WHERE username="%s" and password="%s";"""
 
@@ -92,8 +92,8 @@ class DBUserHelper:
 
         self.selectQueryGetNotes = """SELECT %s.id_note,%s.description,%s.content,%s.created_at FROM %s,%s WHERE %s.username="%s" and %s.athour="%s" and %s.status="%s" ORDER BY NOTES.updated_at DESC;"""
 
-        self.loginQuery = """UPDATE %s SET isLoggedIn="%s" WHERE id_user=%d;"""
-        self.logoutQuery = """UPDATE %s SET isLoggedIn="%s" WHERE username="%s";"""
+        self.loginQuery = """UPDATE %s SET isLoggedIn='%s' WHERE id_user=%d;"""
+        self.logoutQuery = """UPDATE %s SET isLoggedIn='%s' WHERE username="%s";"""
 
         self.connection = mysql.connector.connect(
             host=host,
@@ -138,13 +138,12 @@ class DBUserHelper:
         user = self.executeQuery(self.selectQuery % (
             user_table, str(kwargs["username"]), str(kwargs["password"])))
         if user:
-            print('user id is %d' % int(user[0][0]))
-            self.executeQuery(self.loginQuery %
+            self.executequery(self.loginQuery %
                               (user_table, YES, int(user[0][0])))
         return self.executeQuery(self.selectQuery % (user_table, str(kwargs["username"]), str(kwargs["password"])))
 
     def logoutUser(self, **kwargs):
-        return self.executeQuery(self.logoutQuery % (user_table, NO, str(kwargs['username'])))
+        return self.executequery(self.logoutQuery % (user_table, NO, str(kwargs['username'])))
 
     def selectAllUsers(self, **kwargs):
         return self.executeQuery(self.selectQuery1 % (user_table))

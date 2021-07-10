@@ -15,7 +15,8 @@ imagine you find a new piece of code or a new command that can come in handy any
 ## installation : ##
   * git clone https://github.com/Tarek-Brahmi/TakeNote.git
   * cd TakeNote
-  * sh ./setup.sh
+  * chmod +x -v setup.sh
+  * ./setup.sh
 
 
 ## the `WELCOME` page ###

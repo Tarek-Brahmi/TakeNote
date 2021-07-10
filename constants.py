@@ -1,14 +1,14 @@
 db_name = "TakeNote"
-host="localhost"
-user="root"
-password="password"
+host = "localhost"
+user = "root"
+password = "password"
 
 
 note_table = "NOTES"
-user_table="USERS"
+user_table = "USERS"
 
-YES="YES"
-NO="NO"
+YES = 'YES'
+NO = 'NO'
 create_note_table = """
     USE `%s`;
     CREATE TABLE IF NOT EXISTS `%s` (
@@ -41,4 +41,3 @@ create_users_table = """
 PRIMARY KEY (`id_user`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci AUTO_INCREMENT=1 ;
 """ % (db_name, user_table)
-
