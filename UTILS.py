@@ -67,7 +67,7 @@ class SplashScreen(QMainWindow, splashScrenn):
         self.timer.timeout.connect(self.progress)
 
         self.MyNotesPage.createFromDbNotes(username=str(username))
-        # print(len(myNotes))
+        
         self.timer.start(35)
         x = 1000-(len(myNotes)-(len(myNotes)//1000)*1000)
         QtCore.QTimer.singleShot(x, lambda: self.label_description.setText(
