@@ -16,6 +16,7 @@ create_note_table = """
     `athour` VARCHAR(50) COLLATE utf8_general_ci NOT NULL,
     `description` TEXT(100) COLLATE utf8_general_ci NOT NULL,
     `content` TEXT COLLATE utf8_general_ci NOT NULL,
+    `status` VARCHAR(10) NOT NULL,
     `created_at` DATE NOT NULL,
     `updated_at` DATE NOT NULL,
 PRIMARY KEY (`id_note`)

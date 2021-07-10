@@ -3,17 +3,23 @@ import datetime
 import mysql.connector
 from mysql.connector import Error
 
+
 def wrapContent(content):
-    return content.replace('"',r'\"').replace("'",r"\'")
+    return content.replace('"', r'\"').replace("'", r"\'")
+
+
 class DbNoteHelper:
     class DBException(Exception):
         pass
 
     def __init__(self) -> None:
-        self.insertQuery = """INSERT INTO %s(id_note, athour, description,content,created_at,updated_at) VALUES(NULL, "%s", "%s", "%s", "%s","%s");"""
+        self.insertQuery = """INSERT INTO %s(id_note, athour, description,content,status,created_at,updated_at) VALUES(NULL, "%s", "%s", "%s", "%s","%s","%s");"""
         self.deleteQuery = """DELETE FROM %s WHERE id_note=%d;"""
         self.updateQuery = """UPDATE %s SET description="%s",content="%s", updated_at="%s" WHERE id_note=%d;"""
-        self.selectQuery = """SELECT * FROM %s WHERE athour="%s" ORDER BY id_note ASC;"""
+        
+        self.selectAllQuery = """SELECT * FROM %s WHERE athour="%s" ORDER BY id_note DESC;"""
+        self.selectstatusQuery = """SELECT * FROM %s WHERE status="%s" ORDER BY id_note DESC;"""
+        
         self.selectQuery1 = """SELECT * FROM %s WHERE id_note=%d;"""
 
         self.connection = mysql.connector.connect(
@@ -49,10 +55,10 @@ class DbNoteHelper:
         except Error as e:
             raise self.DBException()
 
-    def insertNote(self, desc, athour, content):
+    def insertNote(self, desc, athour, content,status):
         now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        
-        return self.executequery(self.insertQuery % (note_table, str(athour), wrapContent(str(desc)), wrapContent(str(content)), now, now))
+
+        return self.executequery(self.insertQuery % (note_table, str(athour), wrapContent(str(desc)), wrapContent(str(content)),status, now, now))
 
     def deleteNote(self, id):
         self.executequery(self.deleteQuery % (note_table, int(id)))
@@ -61,10 +67,13 @@ class DbNoteHelper:
         now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.executequery(self.updateQuery %
                           (note_table, wrapContent(str(description)), wrapContent(str(content)), now, int(id)))
-
+    ### used whene user is logged in ...
     def getAllNotes(self, athour):
-        return self.executeQuery(self.selectQuery % (note_table, str(athour)))
-
+        return self.executeQuery(self.selectAllQuery % (note_table, str(athour)))
+    ### used whene no user is logged in 
+    def getAllNotstatusNotes(self, status=NO):
+        return self.executeQuery(self.selectstatusQuery % (note_table,str(status)))
+    
     def getNoteById(self, id):
         return self.executeQuery(self.selectQuery1 % (note_table, int(id)))
 
@@ -78,10 +87,10 @@ class DBUserHelper:
         self.updateQuery = """UPDATE %s SET username="%s",password="%s", updated_at="%s",isLoggedIn="%s" WHERE id_user=%d;"""
         self.deleteQuery = """DELETE FROM %s WHERE id_user=%d;"""
         self.selectQuery = """SELECT id_user, username , created_at,isLoggedIn FROM %s WHERE username="%s" and password="%s";"""
-        
+
         self.selectQuery1 = """SELECT id_user, username , created_at,isLoggedIn FROM %s ;"""
 
-        self.selectQueryGetNotes = """SELECT %s.id_note,%s.description,%s.content,%s.created_at FROM %s,%s WHERE %s.username="%s" and %s.athour="%s" ORDER BY NOTES.updated_at ASC;"""
+        self.selectQueryGetNotes = """SELECT %s.id_note,%s.description,%s.content,%s.created_at FROM %s,%s WHERE %s.username="%s" and %s.athour="%s" and %s.status="%s" ORDER BY NOTES.updated_at DESC;"""
 
         self.loginQuery = """UPDATE %s SET isLoggedIn="%s" WHERE id_user=%d;"""
         self.logoutQuery = """UPDATE %s SET isLoggedIn="%s" WHERE username="%s";"""
@@ -141,4 +150,4 @@ class DBUserHelper:
         return self.executeQuery(self.selectQuery1 % (user_table))
 
     def getNotes(self, **kwargs):
-        return self.executeQuery(self.selectQueryGetNotes % (note_table, note_table, note_table, note_table, note_table, user_table, user_table, str(kwargs['username']), note_table, str(kwargs['username'])))
+        return self.executeQuery(self.selectQueryGetNotes % (note_table, note_table, note_table, note_table, note_table, user_table, user_table, str(kwargs['username']), note_table, str(kwargs['username']),note_table,str(kwargs['status'])))

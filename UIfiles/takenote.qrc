@@ -11,7 +11,8 @@
     <file>icons/notes.png</file>
     <file>icons/reset.png</file>
     <file>icons/login.png</file>
-    <file>icons/cancel.png</file>
+    <file>icons/private.png</file>
+    <file>icons/public.png</file>
   </qresource>
   <qresource prefix="images">
     <file>icons/note_48x48.png</file>

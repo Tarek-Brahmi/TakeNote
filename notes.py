@@ -175,13 +175,3 @@ class Ui_MainWindow(object):
         self.label_7.setText(_translate("MainWindow", "TextLabel"))
         self.label_11.setText(_translate("MainWindow", "My note:"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
-
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())

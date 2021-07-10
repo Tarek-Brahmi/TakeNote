@@ -1,4 +1,4 @@
-from constants import NO
+from constants import NO, YES
 import random
 import re
 from PyQt5 import QtWidgets
@@ -12,7 +12,7 @@ import sys
 from mysql.connector.constants import ServerFlag
 from login import Ui_Form as loginForm
 from welcome import Ui_Form as welcomeUI
-from rtest import Ui_MainWindow as addNote
+from addnote import Ui_MainWindow as addNote
 from myContainer import Ui_MainWindow as showNotes
 from splashScreen import Ui_SplashScreen as splashScrenn
 from Dbhelper import DbNoteHelper
@@ -40,11 +40,10 @@ class AllNotes(object):
         _mynotes = self.dbNoteHelper.getAllNotes(kwargs["username"])
         if len(_mynotes) > 0:
             for note in _mynotes:
-                id_note, athour, description, content, createdAt, updatedAt = note
+                id_note, athour, description, content, status, createdAt, updatedAt = note
                 new_note = Note(id_note=id_note, athour=athour, description=description,
-                                content=content, createdAt=createdAt, updatedAt=updatedAt)
+                                content=content, status=status, createdAt=createdAt, updatedAt=updatedAt)
                 myNotes.append(new_note)
-                myNotesNumber += 1
 
 
 class SplashScreen(QMainWindow, splashScrenn):
@@ -52,7 +51,7 @@ class SplashScreen(QMainWindow, splashScrenn):
         super().__init__(parent=parent)
         self.parent = parent
         self.setupUi(self)
-        self.MyNotesPage = ShowNotes(self)
+        self.MyNotesPage = ShowPrivateNotes(self)
         self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
 
@@ -67,7 +66,7 @@ class SplashScreen(QMainWindow, splashScrenn):
         self.timer.timeout.connect(self.progress)
 
         self.MyNotesPage.createFromDbNotes(username=str(username))
-        
+
         self.timer.start(35)
         x = 1000-(len(myNotes)-(len(myNotes)//1000)*1000)
         QtCore.QTimer.singleShot(x, lambda: self.label_description.setText(
@@ -199,7 +198,7 @@ class UpdateNote(QMainWindow, addNote):
         self.hide()
 
 
-class AddNote(QMainWindow, addNote):
+class AddPrivateNote(QMainWindow, addNote):
     def __init__(self, parent=None) -> None:
         super().__init__(parent=parent)
         self.parent = parent
@@ -229,9 +228,9 @@ class AddNote(QMainWindow, addNote):
             content = self.editt_content.toPlainText()
 
             # TODO need more testing
-
+            # by default w create a private Note..
             myDBNOTEhelper.insertNote(
-                desc=desc, athour=username, content=content)
+                desc=desc, athour=username, content=content, status=YES)
             self.ll_cred.setText("Note added succesfuly !")
             self.ll_cred.setStyleSheet("color: green;")
 
@@ -265,7 +264,7 @@ class AddNote(QMainWindow, addNote):
         self.hide()
 
 
-class ShowNotes(QMainWindow, showNotes):
+class ShowPrivateNotes(QMainWindow, showNotes):
     def __init__(self, parent=None) -> None:
         super().__init__(parent=parent)
 
@@ -274,7 +273,7 @@ class ShowNotes(QMainWindow, showNotes):
         self.setupUi(self)
         self.setWindowTitle('My Notes | Take Note')
         # self.parent.setFixedSize(720, 500)
-        self.addingNoteForm = AddNote(self)
+        self.addingNoteForm = AddPrivateNote(self)
         self.allMynotes = None
         # the tool bar
         self.btn_logout = QtWidgets.QToolButton(self)
@@ -341,8 +340,6 @@ class ShowNotes(QMainWindow, showNotes):
 
         returnValue = msgBox.exec_()
         if returnValue == QMessageBox.Ok:
-            print('deleting......')
-
             myDBNOTEhelper.deleteNote(id=int(selectedNote.getIdNote()))
 
             # refresh the listWidget
@@ -380,6 +377,8 @@ class ShowNotes(QMainWindow, showNotes):
         note_desc = QtWidgets.QLabel(widget_3)
         note_desc.setObjectName("note_desc%d" % index)
         note_desc.setText(kwargs["note_desc"])
+        # create an icon for showing the status of
+        status = kwargs['status']
         note_desc.setToolTip("description of note %d" % (index+1))
         note_tools.addWidget(note_desc)
         spacerItem = QtWidgets.QSpacerItem(
@@ -388,12 +387,31 @@ class ShowNotes(QMainWindow, showNotes):
         bouttons = QtWidgets.QHBoxLayout()
         bouttons.setSpacing(0)
         bouttons.setObjectName("bouttons%d" % index)
+
+        btn_publicorPrivate = QtWidgets.QPushButton(widget_3)
+        if status == YES:
+            # Private note
+            btn_publicorPrivate.setToolTip("Private note")
+            btn_publicorPrivate.setIcon(
+                QtGui.QIcon(":/icons/icons/private.png"))
+            btn_publicorPrivate.setStyleSheet("background-color: yellow;")
+            btn_publicorPrivate.setObjectName("btn_publicorPrivate%d" % index)
+        else:
+            # Public note
+            btn_publicorPrivate.setToolTip("Public note")
+            btn_publicorPrivate.setIcon(
+                QtGui.QIcon(":/icons/icons/public.png"))
+            btn_publicorPrivate.setStyleSheet("background-color: yellow;")
+            btn_publicorPrivate.setObjectName("btn_publicorPrivate%d" % index)
+        bouttons.addWidget(btn_publicorPrivate)
+
         btn_update = QtWidgets.QPushButton(widget_3)
         btn_update.setToolTip("update note")
         btn_update.setIcon(QtGui.QIcon(":/icons/icons/update.png"))
         btn_update.setStyleSheet("background-color: green;")
         btn_update.setObjectName("btn_update%d" % index)
         btn_update.clicked.connect(self.getTheSelectedItem)
+
         bouttons.addWidget(btn_update)
         btn_delete = QtWidgets.QPushButton(widget_3)
         btn_delete.setToolTip("delete note")
@@ -412,7 +430,7 @@ class ShowNotes(QMainWindow, showNotes):
         nodes_with_desc = myNotes
         myNotesNumber = len(myNotes)
         many_note_tools = [self.genereateNoteItem(
-            i, note_desc=nodes_with_desc[i].getDescription()) for i in range(len(nodes_with_desc))]
+            i, note_desc=nodes_with_desc[i].getDescription(), status=nodes_with_desc[i].getStatus()) for i in range(len(nodes_with_desc))]
         for k in range(len(many_note_tools)):
             item = QtWidgets.QListWidgetItem()
             item.setData(1, nodes_with_desc[k].getContent())
