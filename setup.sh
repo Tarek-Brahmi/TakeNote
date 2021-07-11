@@ -34,7 +34,7 @@ check_requirement() {
 
     fi
     ## for my sql server
-    # sudo apt install mysql-client-core-8.0
+    sudo apt install mysql-client-core-8.0
     # sudo apt install mariadb-client-core-10.3
     # for pyQT5 and mysql-connector
     pip3 install mysql-connector-python==8.0.25
