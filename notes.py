@@ -54,10 +54,10 @@ class Ui_MainWindow(object):
         self.label_10.setObjectName("label_10")
         self.formLayout_2.setWidget(
             0, QtWidgets.QFormLayout.SpanningRole, self.label_10)
-        
+
         self.widget = QtWidgets.QWidget(self.layoutWidget)
         self.widget.setObjectName("widget")
-        
+
         self.vl_mynoteDescContent = QtWidgets.QVBoxLayout(self.widget)
         self.vl_mynoteDescContent.setSpacing(1)
         self.vl_mynoteDescContent.setObjectName("vl_mynoteDescContent")
@@ -175,3 +175,11 @@ class Ui_MainWindow(object):
         self.label_7.setText(_translate("MainWindow", "TextLabel"))
         self.label_11.setText(_translate("MainWindow", "My note:"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
+
+    def center(self):
+        frameGm = self.frameGeometry()
+        screen = QtWidgets.QApplication.desktop().screenNumber(
+            QtWidgets.QApplication.desktop().cursor().pos())
+        centerPoint = QtWidgets.QApplication.desktop().screenGeometry(screen).center()
+        frameGm.moveCenter(centerPoint)
+        self.move(frameGm.topLeft())

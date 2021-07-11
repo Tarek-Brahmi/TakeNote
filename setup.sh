@@ -34,9 +34,9 @@ check_requirement() {
 
     fi
     ## for my sql server
-    sudo apt install mysql-client-core-8.0
-    sudo apt install mariadb-client-core-10.3
-    ## for pyQT5 and mysql-connector
+    # sudo apt install mysql-client-core-8.0
+    # sudo apt install mariadb-client-core-10.3
+    # for pyQT5 and mysql-connector
     pip3 install mysql-connector-python==8.0.25
     pip3 install PyQt5==5.14.1
 
@@ -47,7 +47,7 @@ createDBandTables() {
     printf "\e[1;31m[\e[0m+\e[1;31m] \e[5mCreating Database and Tables:\e[25m${NC}\n"
     printf "${GREEN}Enter the root password ${NC}\n"
 
-    printf "\e[1;31m[\e[0m+\e[1;31m]${NC} trying to create a database for your notes named ${RED}${NOTES_TABLE}${NC} with two tables ${GREEN}${NOTES_TABLE}${NC} and ${GREEN}${USERS_TABLE}${NC} :\n"
+    printf "\e[1;31m[\e[0m+\e[1;31m]${NC} trying to create a database for your notes named ${RED}${DB_NAME}${NC} with two tables ${GREEN}${NOTES_TABLE}${NC} and ${GREEN}${USERS_TABLE}${NC} :\n"
     mysql -uroot -p <"db.sql"
     printf "${GREEN}Done ! ${NC}\n"
 
@@ -58,10 +58,11 @@ createDBandTables() {
 
     printf "\n\e[5m${GREEN}username${NC}:${username} and ${GREEN}password${NC}:${password}\e[25m\n"
 
-    python3 CrateDbTables.py $username $password
+    python3 CrateDbTables.py $username $password >/dev/null 2>&1
     printf "${GREEN}All Done ! You can Log in now with \n\t\t${BLUE}username${NC}:${username} \n\t\t${BLUE}password${NC}:${password}${NC}\n\t run python3 main.py to getStarted \n"
 }
 
 check_root
 check_requirement
+clear
 createDBandTables

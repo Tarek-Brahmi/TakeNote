@@ -1,3 +1,4 @@
+import sys
 from constants import NO, YES
 import random
 import re
@@ -45,10 +46,18 @@ class AllNotes(object):
 
 
 class SplashScreen(QMainWindow, splashScrenn):
-    def __init__(self, parent=None) -> None:
+    def __init__(self, parent=None, userna=None) -> None:
+
         super().__init__(parent=parent)
+        global username
         self.parent = parent
         self.setupUi(self)
+        self.center()
+        if userna != None:
+            username = userna
+        else:
+            username = username
+
         self.MyNotesPage = ShowPrivateNotes(self)
         self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
@@ -93,6 +102,7 @@ class LoginForm(QMainWindow, loginForm):
     def __init__(self, parent=None) -> None:
         super().__init__(parent=parent)
         self.setupUi(self)
+        self.center()
         self.setWindowTitle('Login | Take Note')
         self.bt_login.clicked.connect(self.handleSubmit)
 
@@ -129,6 +139,7 @@ class UpdateNote(QMainWindow, addNote):
         self.selectedNote = selectedNote
         self.parent = parent
         self.setupUi(self)
+        self.center()
         self.setWindowTitle('Update note | Take Note')
         self.l_text.setText('Udating Note :')
         self.btn_addnote.setObjectName("btn_addnote")
@@ -201,6 +212,7 @@ class AddPrivateNote(QMainWindow, addNote):
         super().__init__(parent=parent)
         self.parent = parent
         self.setupUi(self)
+        self.center()
         self.setWindowTitle('Adding note | Take Note')
 
         self.ll_cred.setVisible(False)
@@ -270,6 +282,7 @@ class ShowPrivateNotes(QMainWindow, showNotes):
         self.deleteORUpdatePattren = r"(?P<delete>delete)|(?P<update>update)"
         self.setupUi(self)
         self.setWindowTitle('My Notes | Take Note')
+        self.center()
         # self.parent.setFixedSize(720, 500)
         self.addingNoteForm = AddPrivateNote(self)
         self.allMynotes = None
@@ -291,8 +304,8 @@ class ShowPrivateNotes(QMainWindow, showNotes):
         self._myListContainer.itemSelectionChanged.connect(
             self.showContentOfNote)
 
-    def __del__(self):
-        dbuser.logoutUser(username=username)
+    # def __del__(self):
+    #     sys.exit(1)
 
     def logout(self):
         global username, dbuser, myNotes
@@ -306,7 +319,8 @@ class ShowPrivateNotes(QMainWindow, showNotes):
         if returnValue == QMessageBox.Ok:
 
             self.close()
-            del self
+            dbuser.logoutUser(username=username)
+            # del self
 
     def addNote(self):
         self.addingNoteForm.show()
@@ -440,6 +454,7 @@ class WelcomeUI(QMainWindow, welcomeUI):
     def __init__(self, parent=None) -> None:
         super().__init__(parent=parent)
         self.setupUi(self)
+        self.center()
         self.setWindowTitle('Welcome | Take Note')
         self.bt_login.clicked.connect(self.showLoginForm)
         self.loginPage = LoginForm(self)

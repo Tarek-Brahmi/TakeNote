@@ -10,7 +10,7 @@ class Ui_MainWindow(object):
         MainWindow.setFixedSize(820, 530)
         MainWindow.setStyleSheet("background-color: rgb(136, 138, 133);\n"
                                  "border-radius:3px;")
-        
+
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
 
@@ -43,7 +43,6 @@ class Ui_MainWindow(object):
         self._myListContainer.setObjectName("_myListContainer")
         self.verticalLayout_2.addWidget(self._myListContainer)
 
-        
         self.verticalLayout_3.addLayout(self.verticalLayout_2)
 
         self.w_forContent = QtWidgets.QWidget(self.splitter)
@@ -60,7 +59,8 @@ class Ui_MainWindow(object):
         self.label.setObjectName("label")
         self.verticalLayout.addWidget(self.label)
 
-        self._mySelectedNoteContainer = QtWidgets.QScrollArea(self.w_forContent)
+        self._mySelectedNoteContainer = QtWidgets.QScrollArea(
+            self.w_forContent)
         self._mySelectedNoteContainer.setWidgetResizable(True)
         self._mySelectedNoteContainer.setObjectName("_mySelectedNoteContainer")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
@@ -100,4 +100,11 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.label_2.setText(_translate("MainWindow", "My private notes:"))
         self.label.setText(_translate("MainWindow", "Content:"))
-        
+
+    def center(self):
+        frameGm = self.frameGeometry()
+        screen = QtWidgets.QApplication.desktop().screenNumber(
+            QtWidgets.QApplication.desktop().cursor().pos())
+        centerPoint = QtWidgets.QApplication.desktop().screenGeometry(screen).center()
+        frameGm.moveCenter(centerPoint)
+        self.move(frameGm.topLeft())

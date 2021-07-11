@@ -45,7 +45,7 @@ class Ui_MainWindow(object):
         self.btn_reset.setObjectName("btn_reset")
         self.btn_reset.setIcon(QtGui.QIcon(":/icons/icons/reset.png"))
         self.btn_reset.setStyleSheet("background-color: rgb(32, 74, 135);")
-        
+
         self.btn_reset.setToolTip('Reset Inputs')
 
         self.horizontalLayout.addWidget(self.btn_reset)
@@ -55,7 +55,7 @@ class Ui_MainWindow(object):
         self.btn_addnote.setIcon(QtGui.QIcon(":/icons/icons/addnote.png"))
         self.btn_addnote.setStyleSheet("background-color: rgb(204, 0, 0);")
         self.btn_addnote.setToolTip("Add Note")
-        
+
         self.horizontalLayout.addWidget(self.btn_addnote)
         self.horizontalLayout_2.addLayout(self.horizontalLayout)
         self.widget1 = QtWidgets.QWidget(self.splitter)
@@ -95,10 +95,10 @@ class Ui_MainWindow(object):
         self.editt_desc.setSizePolicy(sizePolicy)
         self.editt_desc.setMinimumSize(QtCore.QSize(0, 0))
         self.editt_desc.setStyleSheet("color: orange;\n"
-                                    "font: 13pt \\\"Verdana\\\";\n"
-                                    "padding: 0 8px;\n"
-                                    "background: rgb(25, 25, 40);\n"
-                                    "selection-background-color: darkgray;")
+                                      "font: 13pt \\\"Verdana\\\";\n"
+                                      "padding: 0 8px;\n"
+                                      "background: rgb(25, 25, 40);\n"
+                                      "selection-background-color: darkgray;")
         self.editt_desc.setObjectName("editt_desc")
         self.verticalLayout.addWidget(self.editt_desc)
         self.verticalLayout_3.addWidget(self.frame_2)
@@ -155,4 +155,11 @@ class Ui_MainWindow(object):
         self.label_2.setText(_translate("MainWindow", "  description :"))
         self.label.setText(_translate("MainWindow", "  content:"))
         self.ll_cred.setText(_translate("MainWindow", ""))
-    
+
+    def center(self):
+        frameGm = self.frameGeometry()
+        screen = QtWidgets.QApplication.desktop().screenNumber(
+            QtWidgets.QApplication.desktop().cursor().pos())
+        centerPoint = QtWidgets.QApplication.desktop().screenGeometry(screen).center()
+        frameGm.moveCenter(centerPoint)
+        self.move(frameGm.topLeft())

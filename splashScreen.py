@@ -15,7 +15,9 @@ class Ui_SplashScreen(object):
         SplashScreen.setObjectName("SplashScreen")
         SplashScreen.resize(600, 250)
         SplashScreen.setFixedSize(600, 250)
+
         self.centralwidget = QtWidgets.QWidget(SplashScreen)
+
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
@@ -99,3 +101,11 @@ class Ui_SplashScreen(object):
         self.label_loading.setText(_translate("SplashScreen", "loading..."))
         self.label_credits.setText(_translate(
             "SplashScreen", "<html><head/><body><p><span style=\" font-weight:600;\">Created by</span>: <span style=\" font-style:italic;\">Brahmi Tarek </span>🙋</p></body></html>"))
+
+    def center(self):
+        frameGm = self.frameGeometry()
+        screen = QtWidgets.QApplication.desktop().screenNumber(
+            QtWidgets.QApplication.desktop().cursor().pos())
+        centerPoint = QtWidgets.QApplication.desktop().screenGeometry(screen).center()
+        frameGm.moveCenter(centerPoint)
+        self.move(frameGm.topLeft())

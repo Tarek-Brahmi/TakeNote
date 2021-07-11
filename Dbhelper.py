@@ -26,7 +26,8 @@ class DbNoteHelper:
             host=host,
             user=user,
             passwd=password,
-            database=db_name
+            database=db_name,
+            auth_plugin='mysql_native_password'
         )
         self.cursor = self.connection.cursor(prepared=True)
 
@@ -89,6 +90,7 @@ class DBUserHelper:
         self.selectQuery = """SELECT id_user, username , created_at,isLoggedIn FROM %s WHERE username="%s" and password="%s";"""
 
         self.selectQuery1 = """SELECT id_user, username , created_at,isLoggedIn FROM %s ;"""
+        self.selectLoggedinUserQuery="""SELECT id_user, username  FROM %s where isLoggedIn='YES' LIMIT 1;"""
 
         self.selectQueryGetNotes = """SELECT %s.id_note,%s.description,%s.content,%s.created_at FROM %s,%s WHERE %s.username="%s" and %s.athour="%s" and %s.status="%s" ORDER BY NOTES.updated_at DESC;"""
 
@@ -150,3 +152,5 @@ class DBUserHelper:
 
     def getNotes(self, **kwargs):
         return self.executeQuery(self.selectQueryGetNotes % (note_table, note_table, note_table, note_table, note_table, user_table, user_table, str(kwargs['username']), note_table, str(kwargs['username']),note_table,str(kwargs['status'])))
+    def getLoggedInUser(self):
+        return self.executeQuery(self.selectLoggedinUserQuery%(user_table))
